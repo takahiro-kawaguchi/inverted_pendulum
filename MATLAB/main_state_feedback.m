@@ -5,9 +5,9 @@ get_port = 8000;
 set_port = 22222;
 length_control = 1e4;
 
-M = 10;
+M = 1;
 m = 5;
-L = 5;
+L = 3;
 W = 0.1;
 l = L/2;
 J = 1/12*m*(L^2+W^2);
