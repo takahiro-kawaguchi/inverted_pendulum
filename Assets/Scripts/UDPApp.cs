@@ -27,12 +27,15 @@ public class UDPApp : MonoBehaviour
         {
             recieveThread.Abort();
         }
-        receiveEP = new IPEndPoint(IPAddress.Any, recievePort);
-        sendEP = new IPEndPoint(IPAddress.Parse(sendAddress), sendPort);
-        udpClient = new UdpClient(receiveEP);
-        sendUdpClient = new UdpClient();
-        recieveThread = new Thread(new ThreadStart(ThreadRecieve));
-        recieveThread.Start();
+        if (sendAddress != "")
+        {
+            receiveEP = new IPEndPoint(IPAddress.Any, recievePort);
+            sendEP = new IPEndPoint(IPAddress.Parse(sendAddress), sendPort);
+            udpClient = new UdpClient(receiveEP);
+            sendUdpClient = new UdpClient();
+            recieveThread = new Thread(new ThreadStart(ThreadRecieve));
+            recieveThread.Start();
+        }
         //        Debug.Log("start");
 
     }
