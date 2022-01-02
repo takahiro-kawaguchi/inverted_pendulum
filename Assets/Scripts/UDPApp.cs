@@ -9,9 +9,9 @@ using System.Text;
 
 public class UDPApp : MonoBehaviour
 {
-    public int myPort = 22222;
-    public int yourPort = 8000;
-    public string yourAddress = "127.0.0.1";
+    public int recievePort = 22222;
+    public int sendPort = 8000;
+    public string sendAddress = "127.0.0.1";
     UdpClient udpClient;
     UdpClient sendUdpClient;
     Thread recieveThread;
@@ -23,8 +23,8 @@ public class UDPApp : MonoBehaviour
     // Start is called before the first frame update
     public void UDPStart()
     {
-        receiveEP = new IPEndPoint(IPAddress.Any, myPort);
-        sendEP = new IPEndPoint(IPAddress.Parse(yourAddress), yourPort);
+        receiveEP = new IPEndPoint(IPAddress.Any, recievePort);
+        sendEP = new IPEndPoint(IPAddress.Parse(sendAddress), sendPort);
         udpClient = new UdpClient(receiveEP);
         sendUdpClient = new UdpClient();
         recieveThread = new Thread(new ThreadStart(ThreadRecieve));

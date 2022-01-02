@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Disturbance : MonoBehaviour
 {
-    public ArticulationBody abody;
-    public float disturbance = 1;
+    ArticulationBody abody;
+    public float magnitude = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,7 +17,7 @@ public class Disturbance : MonoBehaviour
     {
         if (Input.GetKeyDown("space"))
         {
-            abody.AddForce(Vector3.forward * disturbance, ForceMode.Impulse);
+            abody.AddForce(Vector3.forward * magnitude, ForceMode.Impulse);
         }
     }
 

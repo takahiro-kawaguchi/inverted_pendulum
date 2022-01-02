@@ -1,7 +1,7 @@
 clear
 close all
 
-get_port = 8000;
+get_port = 22223;
 set_port = 22222;
 length_control = 1e4;
 
@@ -30,11 +30,27 @@ R = 1;
 K = lqr(A, B, Q, R);
 
 u = 0;
+logger = tools.logger('x', 'u', 't');
 
 for k = 1:length_control
-set_input(u, set_port);
-[x, y] = get_information(get_port);
-
-u = -K*x;
-
+    set_input(u, set_port);
+    [x, y, t] = get_information(get_port);
+    
+    u = -K*x;
+    if ~any(isnan(x)) && t-t_old ~= 0
+        logger.add_data('x', x);
+        logger.add_data('t', t);
+        logger.add_data('u', u);
+    end
+    t_old = t;
 end
+
+
+state_names = {'Position', 'Velocity', 'Angle', 'AnglarVelocity'};
+data = logger.get_logs();
+for k =1:numel(state_names)
+   figure, plot(data.t, data.x(:, k));
+   xlabel('Time')
+   ylabel(state_names{k})
+end
+figure, plot(data.t, data.u);
