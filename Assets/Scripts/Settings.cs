@@ -44,6 +44,7 @@ public class Settings : MonoBehaviour
         udp.sendAddress = UDP.sendAddress;
         udp.sendPort = UDP.sendPort;
         udp.recievePort = UDP.recievePort;
+        udp.UDPStart();
 
         pendulumJoint.GetComponent<Disturbance>().magnitude = disturbance.magnitude;
 
