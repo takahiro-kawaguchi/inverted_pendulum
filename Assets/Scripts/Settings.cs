@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Text;
+using System.IO;
 
 public class Settings : MonoBehaviour
 {
@@ -14,6 +14,16 @@ public class Settings : MonoBehaviour
     public GameObject root;
 
     void Start()
+    {
+
+#if UNITY_EDITOR
+#else
+        LoadJson();
+#endif
+        Initialize();
+    }
+
+    void Initialize()
     {
         ArticulationBody carJointBody = root.transform.Find("CarJoint").gameObject.GetComponent<ArticulationBody>();
         carJointBody.mass = car.mass;
@@ -45,16 +55,46 @@ public class Settings : MonoBehaviour
         udp.sendPort = UDP.sendPort;
         udp.recievePort = UDP.recievePort;
         udp.UDPStart();
-
         pendulumJoint.GetComponent<Disturbance>().magnitude = disturbance.magnitude;
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
+
+    void LoadJson()
+    {
+        if (File.Exists("config.json"))
+        {
+            string json = File.ReadAllText("config.json");
+            AllSettings settings = JsonUtility.FromJson<AllSettings>(json);
+            pendulum = settings.pendulumSettings;
+            car = settings.carSettings;
+            UDP = settings.udpSettings;
+            disturbance = settings.disturbanceSettings;
+        }
+        else
+        {
+            WriteJson();
+        }
+
+    }
+
+    void WriteJson()
+    {
+        AllSettings settings = new AllSettings();
+        settings.pendulumSettings = pendulum;
+        settings.carSettings = car;
+        settings.disturbanceSettings = disturbance;
+        settings.udpSettings = UDP;
+        string json = JsonUtility.ToJson(settings, true);
+        string filePath = "config.json";
+        //filePath = Application.persistentDataPath + "/" + filePath;
+        File.WriteAllText(@filePath, json);
+    }
+
 }
 
 [Serializable]
@@ -93,4 +133,13 @@ public struct UDPSettings
 public struct DisturbanceSettings
 {
     public float magnitude;
+}
+
+[Serializable]
+public struct AllSettings
+{
+    public CarSettings carSettings;
+    public PendulumSettings pendulumSettings;
+    public UDPSettings udpSettings;
+    public DisturbanceSettings disturbanceSettings;
 }
