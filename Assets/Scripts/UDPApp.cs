@@ -19,6 +19,7 @@ public class UDPApp : MonoBehaviour
     IPEndPoint sendEP;
     public Action<string> RecieveAction;
     public Func<string> SendAction;
+    bool started = false;
 
     // Start is called before the first frame update
     public void UDPStart()
@@ -35,6 +36,7 @@ public class UDPApp : MonoBehaviour
             sendUdpClient = new UdpClient();
             recieveThread = new Thread(new ThreadStart(ThreadRecieve));
             recieveThread.Start();
+            started = true;
         }
         //        Debug.Log("start");
 
@@ -68,7 +70,10 @@ public class UDPApp : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        recieveThread.Abort();
+        if (started)
+        {
+            recieveThread.Abort();
+        }
     }
 
 }

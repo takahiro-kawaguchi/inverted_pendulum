@@ -21,9 +21,14 @@ public class Settings : MonoBehaviour
         LoadJson();
 #endif
         Initialize();
+        UDPApp udp = transform.Find("Controller").gameObject.GetComponent<UDPApp>();
+        udp.sendAddress = UDP.sendAddress;
+        udp.sendPort = UDP.sendPort;
+        udp.recievePort = UDP.recievePort;
+        //udp.UDPStart();
     }
 
-    void Initialize()
+    public void Initialize()
     {
         ArticulationBody carJointBody = root.transform.Find("CarJoint").gameObject.GetComponent<ArticulationBody>();
         carJointBody.mass = car.mass;
@@ -41,8 +46,18 @@ public class Settings : MonoBehaviour
         ArticulationBody abody = root.GetComponent<ArticulationBody>();
         abody.GetJointPositions(positions);
         positions[0] = car.initialPosition;
-        positions[1] = Mathf.Deg2Rad * this.pendulum.initialAngle;
+        //positions[1] = Mathf.Deg2Rad * this.pendulum.initialAngle;
+        //positions[1] = Mathf.Deg2Rad*0f;
+        positions[1] = Mathf.Deg2Rad * UnityEngine.Random.Range(-180f, 180f);
         abody.SetJointPositions(positions);
+
+        List<float> velocities = new();
+        abody.GetJointVelocities(velocities);
+        for(int i=0; i<velocities.Count; i++)
+        {
+            velocities[i] = 0f;
+        }
+        abody.SetJointVelocities(velocities);
 
         GameObject pendulum = pendulumJointBody.transform.Find("Pendulum").gameObject;
         Vector3 size = pendulum.transform.localScale;
@@ -50,11 +65,6 @@ public class Settings : MonoBehaviour
         pendulum.transform.localScale = size;
         pendulum.transform.localPosition = new Vector3(0f, size.y / 2f, 0f);
 
-        UDPApp udp = transform.Find("Controller").gameObject.GetComponent<UDPApp>();
-        udp.sendAddress = UDP.sendAddress;
-        udp.sendPort = UDP.sendPort;
-        udp.recievePort = UDP.recievePort;
-        udp.UDPStart();
         pendulumJoint.GetComponent<Disturbance>().magnitude = disturbance.magnitude;
     }
 
