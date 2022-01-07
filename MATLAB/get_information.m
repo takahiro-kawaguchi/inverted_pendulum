@@ -1,6 +1,8 @@
-function [x, y, t] = get_information(Port)
+function [x, y, t] = get_information(Port, wait_time)
+if nargin < 2
+    wait_time = 20;
+end
 MsgLength = 1000;
-wait_time = 10;
 try
 msg = judp('RECEIVE', Port, MsgLength, wait_time);
 dat = jsondecode(char(msg'));
