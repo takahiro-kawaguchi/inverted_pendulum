@@ -7,21 +7,21 @@ using Unity.MLAgents.Actuators;
 
 public class PendulumAgent : Agent
 {
-    Settings settings;
-    Controller controller;
+    public Settings settings;
+    public Controller controller;
     float width;
     // Start is called before the first frame update
     void Start()
     {
-        settings = transform.parent.GetComponent<Settings>();
-        controller = GetComponent<Controller>();
+        //settings = transform.parent.GetComponent<Settings>();
+        //controller = GetComponent<Controller>();
         ArticulationDrive drive = controller.root.transform.Find("CarJoint").GetComponent<ArticulationBody>().zDrive;
         width = (drive.upperLimit - drive.lowerLimit)/2f;
     }
 
     public override void OnEpisodeBegin()
     {
-
+        
         settings.Initialize();
         controller.u_agent = 0;
 
@@ -36,8 +36,10 @@ public class PendulumAgent : Agent
         float theta = controller.positions[1];
         theta = Mathf.Atan2(Mathf.Sin(theta), Mathf.Cos(theta));
         controller.positions[1] = theta;
-        sensor.AddObservation(controller.positions);
-        sensor.AddObservation(controller.velocities);
+        sensor.AddObservation(controller.positions[0]);
+        sensor.AddObservation(controller.positions[1]);
+        sensor.AddObservation(controller.velocities[0]);
+        sensor.AddObservation(controller.velocities[1]);
         //Debug.Log(target_tire.transform.position.x - target.transform.position.x);
         //Debug.Log(target_tire.transform.position.y - target.transform.position.y);
 
@@ -45,15 +47,25 @@ public class PendulumAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        controller.u_agent = 100 * actionBuffers.ContinuousActions[0];
+        controller.u_agent = 100f * actionBuffers.ContinuousActions[0];
         float theta = controller.positions[1];
         theta = Mathf.Atan2(Mathf.Sin(theta), Mathf.Cos(theta));
-        SetReward((-Mathf.Abs(theta) / Mathf.PI - Mathf.Abs(controller.positions[0])/width) + 1);
+        float r = -Mathf.Abs(theta)/Mathf.PI + 0.5f;
+        SetReward(r);
+        r = (-Mathf.Abs(controller.positions[0] / width) + 0.5f)*0.1f;
+        AddReward(r);
+        if (Mathf.Abs(controller.positions[0]) > width - 0.1)
+        {
+            EndEpisode();
+        }
+        /*if (Mathf.Abs(theta) > Mathf.PI/4 || Mathf.Abs(controller.positions[0])>13)
+        {
+            EndEpisode();
+        }
+        */
+        /// Debug.Log(controller.positions[0]);
+
         //Debug.Log((-Mathf.Abs(theta) / Mathf.PI - Mathf.Abs(controller.positions[0])/width) + 1);
     }
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
 }
