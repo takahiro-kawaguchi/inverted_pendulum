@@ -42,7 +42,7 @@ public class PendulumAgent : Agent
         sensor.AddObservation(controller.velocities[1]);
         //Debug.Log(target_tire.transform.position.x - target.transform.position.x);
         //Debug.Log(target_tire.transform.position.y - target.transform.position.y);
-
+        //Debug.Log("observe:"+Time.fixedTime.ToString()+","+Time.time.ToString());
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -56,8 +56,12 @@ public class PendulumAgent : Agent
         AddReward(r);
         if (Mathf.Abs(controller.positions[0]) > width - 0.1)
         {
+            AddReward(-100f);
             EndEpisode();
         }
+        //Debug.Log("action:" + Time.fixedTime.ToString() + "," + Time.time.ToString());
+        //Debug.Log("input: " + actionBuffers.ContinuousActions[0].ToString());
+
         /*if (Mathf.Abs(theta) > Mathf.PI/4 || Mathf.Abs(controller.positions[0])>13)
         {
             EndEpisode();
