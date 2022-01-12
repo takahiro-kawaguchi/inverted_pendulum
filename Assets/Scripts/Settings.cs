@@ -21,11 +21,15 @@ public class Settings : MonoBehaviour
         LoadJson();
 #endif
         Initialize();
-        //UDPApp udp = transform.Find("Controller").gameObject.GetComponent<UDPApp>();
-        //udp.sendAddress = UDP.sendAddress;
-        //udp.sendPort = UDP.sendPort;
-        //udp.recievePort = UDP.recievePort;
-        //udp.UDPStart();
+        GameObject controller = transform.Find("Controller").gameObject;
+        if (controller.GetComponent<Controller>().useUDP)
+        {
+            UDPApp udp = transform.Find("Controller").gameObject.GetComponent<UDPApp>();
+            udp.sendAddress = UDP.sendAddress;
+            udp.sendPort = UDP.sendPort;
+            udp.recievePort = UDP.recievePort;
+            udp.UDPStart();
+        }
     }
 
     public void Initialize()
@@ -45,16 +49,15 @@ public class Settings : MonoBehaviour
         List<float> positions = new List<float>();
         ArticulationBody abody = root.GetComponent<ArticulationBody>();
         abody.GetJointPositions(positions);
-        //positions[0] = car.initialPosition;
-        positions[0] = UnityEngine.Random.Range(-car.initialPosition, car.initialPosition);
-        //positions[1] = Mathf.Deg2Rad * this.pendulum.initialAngle;
-        //positions[1] = Mathf.Deg2Rad*0f;
-        positions[1] = Mathf.Deg2Rad * UnityEngine.Random.Range(-this.pendulum.initialAngle, this.pendulum.initialAngle);
+        positions[0] = car.initialPosition;
+        //positions[0] = UnityEngine.Random.Range(-car.initialPosition, car.initialPosition);
+        positions[1] = Mathf.Deg2Rad * this.pendulum.initialAngle;
+        //positions[1] = Mathf.Deg2Rad * UnityEngine.Random.Range(-this.pendulum.initialAngle, this.pendulum.initialAngle);
         abody.SetJointPositions(positions);
 
         List<float> velocities = new();
         abody.GetJointVelocities(velocities);
-        for(int i=0; i<velocities.Count; i++)
+        for (int i = 0; i < velocities.Count; i++)
         {
             velocities[i] = 0f;
         }

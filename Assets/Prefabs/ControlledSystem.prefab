@@ -100,6 +100,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   magnitude: 0
   random: 1
+  probability: 0.000000001
+  key: space
 --- !u!1 &6960599026835406967
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,7 +340,7 @@ MonoBehaviour:
   pendulum:
     length: 3
     mass: 5
-    initialAngle: 180
+    initialAngle: 10
     jointFriction: 0
     linearDamping: 0
     angularDamping: 0
@@ -397,9 +399,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22d588c6cc82c4e4f9aa29d1f573825e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recievePort: 22222
-  sendPort: 8000
-  sendAddress: 127.0.0.1
 --- !u!114 &6960599027656135422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,10 +411,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36158b4773371f14296568c9a18b8d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useUDP: 0
   root: {fileID: 6960599026835406966}
-  velocities: []
-  positions: []
-  u_agent: 0
 --- !u!114 &8161081550101868051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -461,7 +458,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 1000
+  MaxStep: 500
   settings: {fileID: 6768957618302236211}
   controller: {fileID: 6960599027656135422}
 --- !u!114 &5344572595285816599
@@ -585,6 +582,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6960599028035214178}
   - component: {fileID: 6960599028035214177}
+  - component: {fileID: 5572812743414306340}
   m_Layer: 0
   m_Name: CarJoint
   m_TagString: Untagged
@@ -661,6 +659,22 @@ ArticulationBody:
   m_Immovable: 0
   m_UseGravity: 0
   m_CollisionDetectionMode: 0
+--- !u!114 &5572812743414306340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6960599028035214179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61c7836f34d87ac43ba3e93005388c03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  magnitude: 5
+  random: 1
+  probability: 0.000000001
+  key: a
 --- !u!1 &6960599028293449343
 GameObject:
   m_ObjectHideFlags: 0

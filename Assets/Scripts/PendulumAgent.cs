@@ -10,18 +10,20 @@ public class PendulumAgent : Agent
     public Settings settings;
     public Controller controller;
     float width;
+    [System.NonSerialized]
+    ArticulationDrive drive;
     // Start is called before the first frame update
     void Start()
     {
-        //settings = transform.parent.GetComponent<Settings>();
-        //controller = GetComponent<Controller>();
-        ArticulationDrive drive = controller.root.transform.Find("CarJoint").GetComponent<ArticulationBody>().zDrive;
+        drive = controller.root.transform.Find("CarJoint").GetComponent<ArticulationBody>().zDrive;
         width = (drive.upperLimit - drive.lowerLimit)/2f;
     }
 
     public override void OnEpisodeBegin()
     {
-        
+
+        settings.car.initialPosition = UnityEngine.Random.Range(drive.lowerLimit+width*0.1f, drive.upperLimit-width*0.1f);
+        settings.pendulum.initialAngle = UnityEngine.Random.Range(-180, 180);
         settings.Initialize();
         controller.u_agent = 0;
 
@@ -54,9 +56,9 @@ public class PendulumAgent : Agent
         SetReward(r);
         r = (-Mathf.Abs(controller.positions[0] / width) + 0.5f)*0.1f;
         AddReward(r);
-        if (Mathf.Abs(controller.positions[0]) > width - 0.1)
+        if (controller.positions[0] < drive.lowerLimit + width * 0.02f || controller.positions[0] > drive.upperLimit - width * 0.02f)
         {
-            AddReward(-100f);
+            AddReward(-500f);
             EndEpisode();
         }
         //Debug.Log("action:" + Time.fixedTime.ToString() + "," + Time.time.ToString());
@@ -70,6 +72,11 @@ public class PendulumAgent : Agent
         /// Debug.Log(controller.positions[0]);
 
         //Debug.Log((-Mathf.Abs(theta) / Mathf.PI - Mathf.Abs(controller.positions[0])/width) + 1);
+    }
+
+    public override void Heuristic(in ActionBuffers actionsOut)
+    {
+
     }
 
 }
