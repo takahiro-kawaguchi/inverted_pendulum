@@ -31,13 +31,13 @@ K = lqr(A, B, Q, R);
 
 u = 0;
 logger = tools.logger('x', 'u', 't');
-
+t_old = 0;
 for k = 1:length_control
     set_input(u, set_port);
     [x, y, t] = get_information(get_port);
     
-    u = -K*x;
-    if ~any(isnan(x)) && t-t_old ~= 0
+    if ~any(isnan([x(:); t; t_old])) && (t-t_old ~= 0)
+        u = -K*x;
         logger.add_data('x', x);
         logger.add_data('t', t);
         logger.add_data('u', u);
