@@ -8,22 +8,30 @@ using System.Text;
 
 public class Controller : MonoBehaviour
 {
+    public bool useUDP;
     private UDPApp udpApp;
     public ArticulationBody root;
     Observations observations = new Observations();
-    List<float> velocities = new List<float>();
-    List<float> positions = new List<float>();
+    [System.NonSerialized]
+    public List<float> velocities = new List<float>();
+    [System.NonSerialized]
+    public List<float> positions = new List<float>();
     List<float> forces = new List<float>();
     Actions actions;
     float u = 0;
+    [System.NonSerialized]
+    public float u_agent = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        udpApp = GetComponent<UDPApp>();
-        udpApp.RecieveAction += RecieveAction;
-        udpApp.SendAction += SendAction;
-        udpApp.UDPStart();
+        if (useUDP)
+        {
+            udpApp = GetComponent<UDPApp>();
+            udpApp.RecieveAction += RecieveAction;
+            udpApp.SendAction += SendAction;
+            udpApp.UDPStart();
+        }
         root.GetJointPositions(positions);
         root.GetJointVelocities(velocities);
         
@@ -71,7 +79,7 @@ public class Controller : MonoBehaviour
         observations.time = Time.fixedTime;
 
         root.GetJointForces(forces);
-        forces[0] = u;
+        forces[0] = u + u_agent; ;
         root.SetJointForces(forces);
         
     }

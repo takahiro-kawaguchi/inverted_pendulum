@@ -1,0 +1,22 @@
+behaviors:
+  PendulumBehavior:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 2048
+      buffer_size: 10240
+      epsilon: 0.1
+      num_epoch: 10
+      learning_rate: 1e-4
+    network_settings:
+      normalize: true
+      hidden_units: 256
+      num_layers: 2
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+    keep_checkpoints: 50
+    threaded: true
+    summary_freq: 3000
+    max_steps: 1e7
+    time_horizon: 64

@@ -224,9 +224,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5572812743414306340, guid: b11cb1879a898bb4093b55c71d5a9894, type: 3}
+      propertyPath: magnitude
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5572812743414306340, guid: b11cb1879a898bb4093b55c71d5a9894, type: 3}
+      propertyPath: probability
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6960599027306576360, guid: b11cb1879a898bb4093b55c71d5a9894, type: 3}
       propertyPath: m_Name
       value: ControlledSystem
+      objectReference: {fileID: 0}
+    - target: {fileID: 6960599027656135422, guid: b11cb1879a898bb4093b55c71d5a9894, type: 3}
+      propertyPath: useUDP
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7526141827378527006, guid: b11cb1879a898bb4093b55c71d5a9894, type: 3}
       propertyPath: m_RootOrder
@@ -270,6 +282,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7526141827378527006, guid: b11cb1879a898bb4093b55c71d5a9894, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947271911580075096, guid: b11cb1879a898bb4093b55c71d5a9894, type: 3}
+      propertyPath: magnitude
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947271911580075096, guid: b11cb1879a898bb4093b55c71d5a9894, type: 3}
+      propertyPath: probability
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8342830877566115550, guid: b11cb1879a898bb4093b55c71d5a9894, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

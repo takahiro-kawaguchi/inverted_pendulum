@@ -6,6 +6,9 @@ public class Disturbance : MonoBehaviour
 {
     ArticulationBody abody;
     public float magnitude = 0;
+    public bool random;
+    public float probability = 0;
+    public string key;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,9 +18,18 @@ public class Disturbance : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("space"))
+        float mag;
+        if (random)
         {
-            abody.AddForce(Vector3.forward * magnitude, ForceMode.Impulse);
+            mag = UnityEngine.Random.Range(-Mathf.Abs(magnitude), Mathf.Abs(magnitude));
+        }
+        else
+        {
+            mag = magnitude;
+        }
+        if (Input.GetKeyDown(key) || UnityEngine.Random.Range(0, 100) < probability)
+        {
+            abody.AddForce(Vector3.forward * mag, ForceMode.Impulse);
         }
     }
 

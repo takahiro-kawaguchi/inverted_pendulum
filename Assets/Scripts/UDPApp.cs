@@ -9,9 +9,12 @@ using System.Text;
 
 public class UDPApp : MonoBehaviour
 {
-    public int recievePort;
-    public int sendPort;
-    public string sendAddress;
+    [System.NonSerialized]
+    public int recievePort = 0;
+    [System.NonSerialized]
+    public int sendPort = 0;
+    [System.NonSerialized]
+    public string sendAddress = "";
     UdpClient udpClient;
     UdpClient sendUdpClient;
     Thread recieveThread;
@@ -19,14 +22,16 @@ public class UDPApp : MonoBehaviour
     IPEndPoint sendEP;
     public Action<string> RecieveAction;
     public Func<string> SendAction;
+    bool started = false;
 
     // Start is called before the first frame update
     public void UDPStart()
     {
-        if (!(recieveThread is null))
+        if (started)
         {
             recieveThread.Abort();
         }
+        Thread.Sleep(100);
         if (sendAddress != "")
         {
             receiveEP = new IPEndPoint(IPAddress.Any, recievePort);
@@ -35,8 +40,8 @@ public class UDPApp : MonoBehaviour
             sendUdpClient = new UdpClient();
             recieveThread = new Thread(new ThreadStart(ThreadRecieve));
             recieveThread.Start();
+            started = true;
         }
-        //        Debug.Log("start");
 
     }
 
@@ -68,7 +73,10 @@ public class UDPApp : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        recieveThread.Abort();
+        if (started)
+        {
+            recieveThread.Abort();
+        }
     }
 
 }
