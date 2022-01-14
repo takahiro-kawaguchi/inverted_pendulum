@@ -36,7 +36,7 @@ public class PendulumAgent : Agent
         //        sensor.AddObservation(hand.transform.position.y);
         //        sensor.AddObservation(hand.transform.position.z);
         float theta = controller.positions[1];
-        theta = Mathf.Atan2(Mathf.Sin(theta), Mathf.Cos(theta));
+        theta = ClipRad(theta);
         controller.positions[1] = theta;
         sensor.AddObservation(controller.positions[0]);
         sensor.AddObservation(controller.positions[1]);
@@ -51,7 +51,7 @@ public class PendulumAgent : Agent
     {
         controller.u_agent = 100f * actionBuffers.ContinuousActions[0];
         float theta = controller.positions[1];
-        theta = Mathf.Atan2(Mathf.Sin(theta), Mathf.Cos(theta));
+        theta = ClipRad(theta);
         float r = -Mathf.Abs(theta)/Mathf.PI + 0.5f;
         SetReward(r);
         r = (-Mathf.Abs(controller.positions[0] / width) + 0.5f)*0.1f;
@@ -77,6 +77,11 @@ public class PendulumAgent : Agent
     public override void Heuristic(in ActionBuffers actionsOut)
     {
 
+    }
+
+    float ClipRad(float theta)
+    {
+        return Mathf.Atan2(Mathf.Sin(theta), Mathf.Cos(theta));
     }
 
 }
